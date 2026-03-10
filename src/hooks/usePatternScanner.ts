@@ -157,7 +157,8 @@ export function usePatternScanner(trendAssets: AssetTrend[] = []) {
 
               const msEvents = detectMarketStructure(candles);
               for (const p of msEvents) {
-                const formedAt = candles[p.candleIndex]?.time ?? now;
+                const candleTime = (p.candleIndex >= 0 && p.candleIndex < candles.length) ? candles[p.candleIndex].time : 0;
+                const formedAt = candleTime > 0 ? candleTime : (candles[candles.length - 1]?.time ?? now);
                 const { significance, aligned } = adjustSignificance(p.significance, p.type, sym, tf, currentTrends);
                 newStructure.push({
                   id: `ms-${symbol}-${tf}-${p.name}-${now}`,
