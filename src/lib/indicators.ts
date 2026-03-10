@@ -147,6 +147,13 @@ export interface IndicatorDetail {
   confirmed: boolean;
 }
 
+export interface SupportResistance {
+  nearestSupport: number;
+  nearestResistance: number;
+  supportDistance: number; // % distance from price
+  resistanceDistance: number; // % distance from price
+}
+
 export interface ConfirmedTrend extends TrendSignal {
   confirmations: number;
   totalChecks: number;
@@ -156,6 +163,8 @@ export interface ConfirmedTrend extends TrendSignal {
   priceStructure: 'bull' | 'bear' | 'neutral';
   plusDI: number;
   minusDI: number;
+  probability: number; // 0-100%
+  supportResistance: SupportResistance;
 }
 
 export function analyzeTrend(
