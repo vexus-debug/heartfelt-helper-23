@@ -15,6 +15,10 @@ import MarketStructure from "./pages/MarketStructure.tsx";
 import Confluence from "./pages/Confluence.tsx";
 import TradePlanner from "./pages/TradePlanner.tsx";
 import MarketOverview from "./pages/MarketOverview.tsx";
+import MultiTimeframe from "./pages/MultiTimeframe.tsx";
+import Heatmap from "./pages/Heatmap.tsx";
+import SupplyDemand from "./pages/SupplyDemand.tsx";
+import VolatilityRanking from "./pages/VolatilityRanking.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -37,6 +41,10 @@ const App = () => (
                   <Route path="/chart-patterns" element={<ChartPatterns />} />
                   <Route path="/market-structure" element={<MarketStructure />} />
                   <Route path="/market-overview" element={<MarketOverview />} />
+                  <Route path="/mtf" element={<MultiTimeframe />} />
+                  <Route path="/heatmap" element={<Heatmap />} />
+                  <Route path="/supply-demand" element={<SupplyDemand />} />
+                  <Route path="/volatility" element={<VolatilityRanking />} />
                   <Route path="/trade-planner" element={<TradePlanner />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
