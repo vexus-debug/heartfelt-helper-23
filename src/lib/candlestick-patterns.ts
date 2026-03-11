@@ -136,7 +136,7 @@ export function detectCandlestickPatterns(candles: Candle[], excludeLastCandle =
     if (prev2) {
       // Morning Star
       if (isBearish(prev2) && bodySize(prev) < avg * 0.3 && isBullish(c) && c.close > (prev2.open + prev2.close) / 2) {
-        patterns.push({ name: 'Morning Star', type: 'bullish', significance: 'high', candleIndex: i, description: 'Three-candle bullish reversal' });
+        patterns.push({ name: 'Morning Star', type: 'bullish', significance: 'high', candleIndex: i, description: 'Three-candle bullish reversal (bear → small body → bull). Enter long above third candle high. Stop below pattern low. High reliability at support.' });
       }
 
       // Evening Star
