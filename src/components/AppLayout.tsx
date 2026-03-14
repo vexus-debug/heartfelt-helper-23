@@ -1,6 +1,6 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { NavLink } from '@/components/NavLink';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 import {
   BarChart3, ChartCandlestick, LayoutGrid, Network, Layers, Zap, Calculator,
   Activity, ArrowUpDown, Grid3X3, Box, Flame, DollarSign, GitBranch, PieChart,
