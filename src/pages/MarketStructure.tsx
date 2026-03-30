@@ -121,16 +121,6 @@ const MarketStructurePage = () => {
         </div>
       )}
 
-      {selectedPattern && (
-        <div className="border-b border-border" style={{ height: '350px' }}>
-          <ChartView
-            symbol={selectedPattern.symbol}
-            initialTimeframe={selectedPattern.timeframe}
-            onClose={() => setSelectedPattern(null)}
-            patternHighlight={{ name: selectedPattern.patternName, category: 'structure' }}
-          />
-        </div>
-      )}
 
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-5">
