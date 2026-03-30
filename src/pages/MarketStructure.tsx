@@ -220,7 +220,7 @@ function SmcCard({ dp, isSelected, onClick }: { dp: DetectedPattern; isSelected:
         <p className="text-[11px] leading-relaxed text-muted-foreground">{p.description}</p>
 
         {/* Per-result SMC Overview */}
-        {meta && <SmcMetaOverview meta={meta} price={dp.price} />}
+        <SmcMetaOverview meta={meta || {}} price={dp.price} />
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-1">
