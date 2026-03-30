@@ -251,8 +251,6 @@ function SmcMetaOverview({ meta, price }: { meta: SmcMeta; price: number }) {
   const hasLevels = meta.suggestedStop != null || meta.suggestedTarget != null;
   const hasPhase = meta.marketPhase != null;
 
-  if (!hasProbabilities && !hasScore && !hasRR && !hasPhase) return null;
-
   const phaseColor: Record<string, string> = {
     accumulation: 'text-accent',
     expansion: 'text-primary',
