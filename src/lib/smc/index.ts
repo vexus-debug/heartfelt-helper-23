@@ -1,7 +1,7 @@
 import type { Candle } from '@/types/scanner';
 import type { SmcAnalysis, SmcEvent } from './types';
 import { findSwings } from './swings';
-import { detectBosChoch, detectContinuationPatterns } from './bos-choch';
+import { detectBosChoch, detectContinuationPatterns, countFailedChoch } from './bos-choch';
 import { detectLiquidityPools, detectLiquiditySweeps, detectInducement } from './liquidity';
 import { detectFVGs, detectOrderBlocks } from './fvg-ob';
 import { detectMarketPhase, detectRange, detectRangeEvents, detectSession } from './market-phase';
@@ -81,10 +81,13 @@ export function analyzeSmartMoneyConcepts(candles: Candle[], htfBias?: 'bullish'
   // Calculate probabilities
   const { probBull, probBear } = calcProbabilities(filtered);
 
-  // Apply probabilities to each event
+  // Count failed CHoCH in the current trend
+  const chochFailures = countFailedChoch(candles, swings);
+
+  // Apply probabilities and chochFailures to each event
   const finalEvents = filtered.map(e => ({
     ...e,
-    meta: { ...e.meta, probBull, probBear, marketPhase },
+    meta: { ...e.meta, probBull, probBear, marketPhase, chochFailures },
   }));
 
   return {

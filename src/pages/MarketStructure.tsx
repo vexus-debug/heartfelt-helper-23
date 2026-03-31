@@ -15,30 +15,39 @@ import {
 
 type TypeFilter = 'all' | 'bullish' | 'bearish';
 const SCAN_TIMEFRAMES: Timeframe[] = ['5', '15', '60', '240', 'D', 'W'];
+const CHOCH_FAIL_OPTIONS = ['all', '1+', '2+', '3+'] as const;
+type ChochFailFilter = typeof CHOCH_FAIL_OPTIONS[number];
 
 const MarketStructurePage = () => {
   const { structureGroups, scanning, lastScanTime, scanProgress, runScan } = useSharedPatternScanner();
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
   const [tfFilter, setTfFilter] = useState<Timeframe | 'all'>('all');
+  const [chochFailFilter, setChochFailFilter] = useState<ChochFailFilter>('all');
   
 
   const filteredGroups = useMemo(() => {
     const result: PatternGroup[] = [];
     const timeframes = tfFilter === 'all' ? SCAN_TIMEFRAMES : [tfFilter];
+    const minChochFails = chochFailFilter === 'all' ? 0 : parseInt(chochFailFilter);
     for (const tf of timeframes) {
       const group = structureGroups.find(g => g.timeframe === tf);
       if (!group) continue;
       const filtered = group.patterns.filter(dp => {
         if (typeFilter !== 'all' && dp.pattern.type !== typeFilter) return false;
+        if (minChochFails > 0) {
+          const meta = (dp.pattern as SmcEvent).meta;
+          const count = meta?.chochFailures ?? 0;
+          if (count < minChochFails) return false;
+        }
         return true;
       });
       if (filtered.length > 0) result.push({ ...group, patterns: filtered });
     }
     return result;
-  }, [structureGroups, typeFilter, tfFilter]);
+  }, [structureGroups, typeFilter, tfFilter, chochFailFilter]);
 
   const totalPatterns = filteredGroups.reduce((s, g) => s + g.patterns.length, 0);
-  const hasFilters = typeFilter !== 'all' || tfFilter !== 'all';
+  const hasFilters = typeFilter !== 'all' || tfFilter !== 'all' || chochFailFilter !== 'all';
 
 
   return (
@@ -101,8 +110,21 @@ const MarketStructurePage = () => {
               >{TIMEFRAME_LABELS[tf]}</button>
             ))}
           </div>
+          <div className="h-4 w-px bg-border" />
+          <div className="flex items-center gap-1">
+            <span className="text-[9px] text-muted-foreground mr-0.5">CHoCH Fails:</span>
+            {CHOCH_FAIL_OPTIONS.map(opt => (
+              <button
+                key={opt}
+                onClick={() => setChochFailFilter(opt)}
+                className={`rounded-full px-2 py-1 text-[10px] font-medium transition-colors ${
+                  chochFailFilter === opt ? 'bg-destructive/20 text-destructive' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >{opt === 'all' ? 'Any' : opt}</button>
+            ))}
+          </div>
           {hasFilters && (
-            <button onClick={() => { setTypeFilter('all'); setTfFilter('all'); }}
+            <button onClick={() => { setTypeFilter('all'); setTfFilter('all'); setChochFailFilter('all'); }}
               className="flex items-center gap-0.5 rounded-full px-2 py-1 text-[10px] text-muted-foreground hover:text-foreground">
               <X className="h-2.5 w-2.5" /> Clear
             </button>
@@ -313,6 +335,10 @@ function SmcMetaOverview({ meta, price }: { meta: SmcMeta; price: number }) {
         )}
         {meta.nearKeyLevel && (
           <StatItem icon={<Crosshair className="h-2.5 w-2.5" />} label="Key Lvl" value={meta.keyLevelName || 'Yes'} valueClass="text-accent" />
+        )}
+        {meta.chochFailures != null && meta.chochFailures > 0 && (
+          <StatItem icon={<Shield className="h-2.5 w-2.5" />} label="CHoCH Fails" value={`${meta.chochFailures}`}
+            valueClass={meta.chochFailures >= 3 ? 'text-destructive' : meta.chochFailures >= 2 ? 'text-accent' : 'text-foreground'} />
         )}
       </div>
 
