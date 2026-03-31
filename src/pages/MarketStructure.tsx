@@ -15,11 +15,14 @@ import {
 
 type TypeFilter = 'all' | 'bullish' | 'bearish';
 const SCAN_TIMEFRAMES: Timeframe[] = ['5', '15', '60', '240', 'D', 'W'];
+const CHOCH_FAIL_OPTIONS = ['all', '1+', '2+', '3+'] as const;
+type ChochFailFilter = typeof CHOCH_FAIL_OPTIONS[number];
 
 const MarketStructurePage = () => {
   const { structureGroups, scanning, lastScanTime, scanProgress, runScan } = useSharedPatternScanner();
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
   const [tfFilter, setTfFilter] = useState<Timeframe | 'all'>('all');
+  const [chochFailFilter, setChochFailFilter] = useState<ChochFailFilter>('all');
   
 
   const filteredGroups = useMemo(() => {
