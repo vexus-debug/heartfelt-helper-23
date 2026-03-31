@@ -47,7 +47,7 @@ const MarketStructurePage = () => {
   }, [structureGroups, typeFilter, tfFilter, chochFailFilter]);
 
   const totalPatterns = filteredGroups.reduce((s, g) => s + g.patterns.length, 0);
-  const hasFilters = typeFilter !== 'all' || tfFilter !== 'all';
+  const hasFilters = typeFilter !== 'all' || tfFilter !== 'all' || chochFailFilter !== 'all';
 
 
   return (
