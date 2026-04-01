@@ -45,7 +45,8 @@ export function detectPureFVGs(candles: Candle[], timeframe: Timeframe): PureFVG
     atrSum += candles[i].high - candles[i].low;
   }
   const atr = atrSum / Math.min(candles.length - 1, 14);
-  const minGap = atr * 0.15; // minimum gap size to filter noise
+  const minGap = atr * 0.5; // minimum gap size — only large imbalances
+  const minImpulseBody = atr * 1.5; // impulse candle must be at least 1.5x ATR
 
   // Average volume for ratio
   const recentVols = candles.slice(-20).map(c => c.volume);
