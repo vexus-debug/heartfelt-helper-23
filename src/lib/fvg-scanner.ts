@@ -61,7 +61,7 @@ export function detectPureFVGs(candles: Candle[], timeframe: Timeframe): PureFVG
     const impulseBody = Math.abs(c1.close - c1.open);
 
     // Bullish FVG: gap between c0.high and c2.low
-    if (c2.low > c0.high && (c2.low - c0.high) > minGap) {
+    if (c2.low > c0.high && (c2.low - c0.high) > minGap && impulseBody > minImpulseBody) {
       const gapHigh = c2.low;
       const gapLow = c0.high;
       const gapSize = gapHigh - gapLow;
